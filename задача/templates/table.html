@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>Works log</h3>
+<a class="btn btn-success " href="/departments">To Departments</a>
+{% if current_user.is_authenticated %}
+    <a class="btn btn-success " href="/jobs">Add job</a>
+{% endif %}
+{% for item in data %}
+    <h1>Action # {{item['id']}}</h1>
+    <table border="1" width="100%" cellpadding="5">
+        <tr>
+            <th bgcolor="#808080">Title of activity</th>
+            <th bgcolor="#808080">Team leader</th>
+            <th bgcolor="#808080">Duration</th>
+            <th bgcolor="#808080">List of collaborators</th>
+            <th bgcolor="#808080">Hazard category</th>
+            <th bgcolor="#808080">Is finished</th>
+        </tr>
+        <tr>
+            <td bgcolor="#87cefa">{{item['title']}}</td>
+            <td bgcolor="#87cefa">{{item['leader']}}</td>
+            <td bgcolor="#87cefa">{{item['duration']}} hours</td>
+            <td bgcolor="#87cefa">{{item['list']}}</td>
+            <td bgcolor="#87cefa">{{item['category']}}</td>
+            {% if item['finish'] == False %}
+                <td bgcolor="#ff2b2b">Is not finished</td>
+            {% else %}
+                <td bgcolor="#5da130">Is finished</td>
+            {% endif %}
+        </tr>
+    </table>
+{% if current_user.is_authenticated and (current_user.id == item['team_leader'] or current_user.id == 1) %}
+    <div>
+        <a href="/jobs/{{ item.id }}" class="btn btn-warning">
+            Изменить
+        </a>
+        <a href="/jobs_delete/{{ item.id }}" class="btn btn-danger">
+            Удалить
+        </a>
+    </div>
+{% endif %}
+{% endfor %}
+{% endblock %}
